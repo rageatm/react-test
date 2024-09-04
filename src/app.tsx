@@ -38,37 +38,36 @@ const App = () => {
   );
 };
 
-const List = (props: { list: Array<ItemType> }) => (
+const List = ({ list }: { list: Array<ItemType> }) => (
   <ul>
-    {props.list.map((item) => (
+    {list.map((item) => (
       <Item key={item.objectID} item={item} />
     ))}{" "}
   </ul>
 );
 
-const Item = (props: { item: ItemType }) => (
+const Item = ({
+  item: { title, url, author, num_comments, points },
+}: {
+  item: ItemType;
+}) => (
   <li>
     <span>
-      <a href={props.item.url}>{props.item.title}</a>
+      <a href={url}>{title}</a>
     </span>
-    <span>{props.item.author}</span>
-    <span>{props.item.num_comments}</span>
-    <span>{props.item.points}</span>
+    <span>{author}</span>
+    <span>{num_comments}</span>
+    <span>{points}</span>
   </li>
 );
 
-const Search = (props: { search: string; onSearch: any }) => {
+const Search = ({ search, onSearch }: { search: string; onSearch: any }) => {
   const [searchTerm] = React.useState("");
 
   return (
     <div>
       <label htmlFor="search">Search: </label>
-      <input
-        id="search"
-        type="text"
-        value={props.search}
-        onChange={props.onSearch}
-      />
+      <input id="search" type="text" value={search} onChange={onSearch} />
       <p>
         Searching for <strong>{searchTerm}</strong>.
       </p>
