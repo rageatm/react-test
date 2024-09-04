@@ -1,5 +1,24 @@
-import { ItemType } from "app-type";
+import {
+  ItemType,
+  ListType,
+  SearchType,
+  StorageStateReturnType,
+} from "app-type";
 import React from "react";
+
+const useStorageState = (
+  key: string,
+  initialState: string
+): StorageStateReturnType => {
+  const [value, setValue] = React.useState(
+    localStorage.getItem(key) || initialState
+  );
+  React.useEffect(() => {
+    localStorage.setItem(key, value);
+  }, [value, key]);
+
+  return [value, setValue];
+};
 
 const App = () => {
   const stories = [
@@ -9,7 +28,7 @@ const App = () => {
       author: "Jordan Walke",
       num_comments: 3,
       points: 4,
-      objectID: 0,
+      objectId: 0,
     },
     {
       title: "Redux",
@@ -17,10 +36,10 @@ const App = () => {
       author: "Dan Abramov, Andrew Clark",
       num_comments: 2,
       points: 5,
-      objectID: 1,
+      objectId: 1,
     },
   ];
-  const [searchTerm, setSearchTerm] = React.useState("React");
+  const [searchTerm, setSearchTerm] = useStorageState("search", "React");
   const handleSearch = (event: any) => {
     setSearchTerm(event.target.value);
   };
@@ -38,19 +57,31 @@ const App = () => {
   );
 };
 
-const List = ({ list }: { list: Array<ItemType> }) => (
+const Search = ({ search, onSearch }: SearchType) => (
+  <div>
+    <label htmlFor="search">Search: </label>
+    <input id="search" type="text" value={search} onChange={onSearch} />
+    <p>
+      Searching for <strong>{search}</strong>.
+    </p>
+  </div>
+);
+
+const List = ({ list }: ListType) => (
   <ul>
-    {list.map((item) => (
-      <Item key={item.objectID} item={item} />
-    ))}{" "}
+    {list.map(({ objectId, ...item }) => (
+      <Item key={objectId} {...item} />
+    ))}
   </ul>
 );
 
 const Item = ({
-  item: { title, url, author, num_comments, points },
-}: {
-  item: ItemType;
-}) => (
+  title,
+  url,
+  author,
+  num_comments,
+  points,
+}: Omit<ItemType, "objectId">) => (
   <li>
     <span>
       <a href={url}>{title}</a>
@@ -60,19 +91,5 @@ const Item = ({
     <span>{points}</span>
   </li>
 );
-
-const Search = ({ search, onSearch }: { search: string; onSearch: any }) => {
-  const [searchTerm] = React.useState("");
-
-  return (
-    <div>
-      <label htmlFor="search">Search: </label>
-      <input id="search" type="text" value={search} onChange={onSearch} />
-      <p>
-        Searching for <strong>{searchTerm}</strong>.
-      </p>
-    </div>
-  );
-};
 
 export default App;
