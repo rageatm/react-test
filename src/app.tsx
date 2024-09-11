@@ -1,7 +1,7 @@
 import {
+  InputWithLabelType,
   ItemType,
   ListType,
-  SearchType,
   StorageStateReturnType,
 } from "app-type";
 import React from "react";
@@ -50,22 +50,51 @@ const App = () => {
   return (
     <div>
       <h1>My Hacker Stories</h1>
-      <Search search={searchTerm} onSearch={handleSearch} />
+      <InputWithLabel
+        id="search"
+        value={searchTerm}
+        isFocused
+        onInputChange={handleSearch}
+      >
+        <strong>Search: </strong>
+      </InputWithLabel>
       <hr />
       <List list={searchedStories} />
     </div>
   );
 };
 
-const Search = ({ search, onSearch }: SearchType) => (
-  <div>
-    <label htmlFor="search">Search: </label>
-    <input id="search" type="text" value={search} onChange={onSearch} />
-    <p>
-      Searching for <strong>{search}</strong>.
-    </p>
-  </div>
-);
+const InputWithLabel = ({
+  id,
+  value,
+  type = "text",
+  onInputChange,
+  isFocused,
+  children,
+}: InputWithLabelType) => {
+  const inputRef = React.useRef<any>();
+  React.useEffect(() => {
+    if (isFocused && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isFocused]);
+
+  return (
+    <>
+      <label htmlFor={id}>{children}</label>
+      &nbsp;
+      {/* b */}
+      <input
+        ref={inputRef}
+        id={id}
+        type={type}
+        value={value}
+        autoFocus={isFocused}
+        onChange={onInputChange}
+      />{" "}
+    </>
+  );
+};
 
 const List = ({ list }: ListType) => (
   <ul>

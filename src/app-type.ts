@@ -1,6 +1,10 @@
-export interface SearchType {
-  search: string;
-  onSearch: any;
+export interface InputWithLabelType {
+  id: string;
+  value: string;
+  type?: string;
+  onInputChange: any;
+  isFocused: boolean;
+  children: any;
 }
 
 export interface ListType {
@@ -18,5 +22,5 @@ export interface ItemType {
 
 export type StorageStateReturnType = [
   string,
-  React.Dispatch<React.SetStateAction<string>>
+  React.Dispatch<React.SetStateAction<string>>,
 ];
