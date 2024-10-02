@@ -4,7 +4,7 @@ export interface StoryType {
   author: string;
   num_comments: number;
   points: number;
-  objectId: number;
+  objectID: number;
 }
 
 export interface InputWithLabelType {
@@ -30,3 +30,8 @@ export type StorageStateReturnType = [
   string,
   React.Dispatch<React.SetStateAction<string>>
 ];
+
+export type StoryReducer = (
+  state: any,
+  action: any
+) => { data: StoryType[]; isLoading: boolean; isError: boolean };
